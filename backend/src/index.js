@@ -9,7 +9,7 @@ import mongoose from "mongoose"
 (
   async()=>{
     try{
-    await mongoose.connect(`${process.env.MONGODB_URI}/${process.env.DATABASE}`)
+    await mongoose.connect(`${process.env.MONGODB_URI}${process.env.DATABASE}`)
     app.listen(process.env.PORT , ()=>{
         console.log(`app is listning on port : ${process.env.PORT}`)
     })

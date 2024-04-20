@@ -3,9 +3,9 @@ const asyncHandler = (requestHandler)=>
         try{
             await requestHandler(req,res,next)
         }catch(error){
-            res.status(err.code || 500).json({
+            res.status(500).json({
                 success : false,
-                message : err.message
+                message : error.message
             })
         }
     }

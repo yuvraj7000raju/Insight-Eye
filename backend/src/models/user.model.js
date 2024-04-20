@@ -24,13 +24,13 @@ const userSchema = new Schema(
             lowercase: true,
         },
         image: {
-            type: string
+            type: String
         },
         bio: {
-            type: string
+            type: String
         },
         passward: {
-            type: string,
+            type: String,
             required: true,
             trim: true
         },
@@ -66,9 +66,8 @@ const userSchema = new Schema(
         ],
         intrests : [
             {
-                type : string,
+                type : String,
                 trim :true,
-                unique :true,
                 lowercase :true
             }
         ]
@@ -77,12 +76,12 @@ const userSchema = new Schema(
     }
 )
 
-userSchema.pre("save", (next)=>{
-    if(! this.Modified("passward")){
+userSchema.pre("save", async function(next){
+    if(!this.isModified("passward")){
         return next()
     }
 
-    this.passward = bcrypt.hase(this.passward, 10)
+    this.passward =  await bcrypt.hash(this.passward, 10)
     next()
 })
 
@@ -91,7 +90,7 @@ userSchema.method.isPasswardCorrect = async function(passward){
 }
 
 userSchema.method.generateAccessToken = function(){
-    jwt.sign(
+    return jwt.sign(
         {
             id : this.id,
             email : this.email,
@@ -105,7 +104,7 @@ userSchema.method.generateAccessToken = function(){
 }
 
 userSchema.method.generateRefreshToken = function(){
-    jwt.sign(
+    return jwt.sign(
         {
             id : this.id
         },
@@ -116,4 +115,4 @@ userSchema.method.generateRefreshToken = function(){
     )
 }
 
-export const user = mongoose.model("user",userSchema)
+export const User = mongoose.model("user",userSchema)
