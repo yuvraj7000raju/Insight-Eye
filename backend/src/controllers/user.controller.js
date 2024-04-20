@@ -1,8 +1,11 @@
-const registerUser = async function(req,res){
+import { asyncHandler } from "../utils/asyncHandler.js"
+
+const registerUser = asyncHandler( async (req,res)=>{
     res.status(200).json({
         message : "hello"
     })
 }
+)
 
 
 export {
