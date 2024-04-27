@@ -56,7 +56,42 @@ return res.status(200).json(
 }
 )
 
+const loginUser = asyncHandler(async(req,res)=>{
+     const {username,email,passward} = req.body
+     console.log(req.body)
+
+     if(!email || !username){
+      throw new ApiError(400,"no email or username is given")
+     }
+
+     const user = await User.findOne({
+      $or :[{username} , {email}]
+     })
+
+     if(!user){
+      throw new ApiError(404,"User not found")
+    }
+    
+    console.log(user)
+     
+     const isPasswardValid = await user.isPasswardCorrect(passward)
+
+     if( !isPasswardValid ){
+      throw new ApiError(400,"passward is not matched !")
+     }
+     
+     console.log(username)
+
+     
+     console.log(user)
+
+     res.status(200).json(
+      new ApiResponse(200,user,"User is loged in sussesfully")
+     )
+})
+
 
 export {
-    registerUser
+    registerUser,
+    loginUser
 }

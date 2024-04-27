@@ -85,11 +85,11 @@ userSchema.pre("save", async function(next){
     next()
 })
 
-userSchema.method.isPasswardCorrect = async function(passward){
+userSchema.methods.isPasswardCorrect = async function(passward){
     return await bcrypt.compare(passward,this.passward)
 }
 
-userSchema.method.generateAccessToken = function(){
+userSchema.methods.generateAccessToken = function(){
     return jwt.sign(
         {
             id : this.id,
@@ -103,7 +103,7 @@ userSchema.method.generateAccessToken = function(){
     )
 }
 
-userSchema.method.generateRefreshToken = function(){
+userSchema.methods.generateRefreshToken = function(){
     return jwt.sign(
         {
             id : this.id
