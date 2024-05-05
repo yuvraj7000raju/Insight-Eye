@@ -46,21 +46,25 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(409, "user with email or username already existed")
   }
 
-  const imageLocalPath = req.file.path;
+  const imageLocalPath = req.file?.path || "";
   if (!imageLocalPath) {
     console.log(req.file);
     console.log("nooooooooooooooooooooo")
     console.log(req.file)
   }
 
-  const image = await uploadOnCloudinary(imageLocalPath)
+  
+  const intrestArray = intrests? intrests.split(",") : null
+ 
+
+  const image = imageLocalPath ? await uploadOnCloudinary(imageLocalPath) : ""
 
   const user = await User.create({
     Name,
     username: username.toLowerCase(),
     email,
     passward,
-    intrests: intrests || "add",
+    intrests: intrestArray ,
     image: image?.url || ""
 
   })
@@ -109,7 +113,7 @@ const {refreshToken , accessToken} = await generateRefreshAndAccessToken(user._i
 
 
 
-const logedinUser = await User.findById(user._id).select("-refreshToken -accessToken");
+const logedinUser = await User.findById(user._id).select("-refreshToken -passward");
 const options = {
   httpOnly : true,
   secure : true
